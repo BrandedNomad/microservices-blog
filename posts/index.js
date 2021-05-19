@@ -1,11 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const {randomBytes} = require('crypto')
+const cors = require('cors')
 
 const server = express();
 const port = 3001 || process.env.PORT
 
 server.use(bodyParser.json())
+server.use(cors());
 
 const posts = {};
 
