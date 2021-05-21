@@ -4,9 +4,20 @@ import React, {useState} from 'react';
 const CommentList = ({comments})=>{
 
     const renderedComments = comments.map(comment=>{
+        let content;
+        if(comment.status === 'approved'){
+            content = comment.content;
+        }else if(comment.status === 'pending'){
+            content = 'This comment is awaiting moderation'
+        }else if(comment.status === 'rejected'){
+            content = 'This comment has been rejected'
+        }else {
+            content = 'No comment'
+        }
+
         return(
             <li key={comment.id}>
-                {comment.content || []}
+                {content || []}
             </li>
         )
     })

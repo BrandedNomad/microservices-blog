@@ -17,28 +17,57 @@ server.get('/posts',(req,res)=>{
 
 })
 
+const handleEvent = (type,data) =>{
+
+    switch(type){
+        case 'PostCreated': {
+            let {id,title} = data;
+            posts[id]={id,title,comments:[]};
+            break;
+        }
+        case 'CommentCreated':{
+            let {id,content,postId,status} = data;
+            const post = posts[postId]
+            post.comments.push({id,content,status})
+            break;
+        }
+        case 'CommentUpdated': {
+            let {id,content,postId,status} = data;
+            const post = posts[postId]
+            const comment = post.comments.find(comment=>{
+                return comment.id === id;
+            });
+            comment.status = status;
+            comment.content = content;
+            break;
+        }
+        default:
+            break;
+    }
+
+}
+
 //Listens for events
 server.post('/events',(req,res)=>{
     const {type,data} = req.body;
 
-    if(type === 'PostCreated'){
-        const {id,title} = data;
-        posts[id]={id,title,comments:[]};
-    }
-
-    if(type === 'CommentCreated'){
-        const {id,content,postId} = data;
-        const post = posts[postId]
-        post.comments.push({id,content}) //WTF
-
-    }
-
-    console.log("from query",posts)
+    handleEvent(type,data)
 
     res.status(200).send({});
 
 })
 
-server.listen(3003,()=>{
-    console.log("Up and running on 3003")
+server.listen(3003,async ()=>{
+    console.log("Up and running on 3003");
+    //checks the event bus for any missed events
+    try{
+        const res = await axios.get('http://localhost:3005/events')
+        for(let event of res.data){
+            console.log('processing event:', event.type);
+            handleEvent(event.type,event.data)
+        }
+    }catch(e){
+        console.log(e)
+    }
+
 })
