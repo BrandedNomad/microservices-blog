@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod #create a pod
+metadata:
+  name: posts #name the pod posts
+spec:
+  containers: #create a container inside the pod
+    - name: posts #named posts
+      image: brandednomad/blog-service-posts:0.0.1 #with this image
+      imagePullPolicy: Never #prevents imagePullBackoff errors

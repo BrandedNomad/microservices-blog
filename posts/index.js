@@ -26,7 +26,8 @@ server.post('/posts',async (req,res)=>{
         title
     };
 
-    await axios.post('http://localhost:3005/events',{
+    //eb-srv is the service name of the clusterIP for the eb pod
+    await axios.post('http://eb-srv:3005/events',{
         type:"PostCreated",
         data: {
             id,

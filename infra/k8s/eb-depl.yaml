@@ -1,0 +1,32 @@
+apiVersion: apps/v1 #deployment object is inside apps
+kind: Deployment #kind of configuration
+metadata:
+  name: eb-depl #name of deployment
+spec:
+  replicas: 1
+  selector: # take a look at all the pods created
+    matchLabels: #find all the pods with the following labels
+      app: eb #label name
+  template: # specifies the configuration of pods to be created
+    metadata:
+      labels: # give the pod the following label
+        app: eb
+    spec:
+      containers: # run the following containers inside the pod
+        - name: eb
+          image: brandednomad/blog-service-eventbus
+---
+# ipCluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: eb-srv
+spec:
+  selector:
+    app: eb
+  type: ClusterIP
+  ports:
+    - name: eb
+      protocol: TCP
+      port: 3005 #cluster port
+      targetPort: 3005 #application port

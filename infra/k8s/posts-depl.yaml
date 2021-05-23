@@ -1,0 +1,33 @@
+apiVersion: apps/v1 #deployment object is inside apps
+kind: Deployment #kind of configuration
+metadata:
+  name: posts-depl #name of deployment
+spec:
+  replicas: 1
+  selector: # take a look at all the pods created
+    matchLabels: #find all the pods with the following labels
+      app: posts #label name
+  template: # specifies the configuration of pods to be created
+    metadata:
+      labels: # give the pod the following label
+        app: posts
+    spec:
+      containers: # run the following containers inside the pod
+        - name: posts
+          image: brandednomad/blog-service-posts
+---
+# ipcluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-cluster-srv
+spec:
+  selector:
+    app: posts
+  type: ClusterIP
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+
