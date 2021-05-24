@@ -41,7 +41,7 @@ server.post('/posts/create',async (req,res)=>{
 
 //Events
 server.post("/events",(req,res)=>{
-    console.log("received event", req.body.type)
+    console.log("received an event", req.body.type)
     res.status(200).send({})
 })
 
