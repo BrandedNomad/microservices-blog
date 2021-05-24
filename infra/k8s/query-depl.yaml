@@ -1,0 +1,32 @@
+apiVersion: apps/v1 #deployment object is inside apps
+kind: Deployment #kind of configuration
+metadata:
+  name: query-depl #name of deployment
+spec:
+  replicas: 1
+  selector: # take a look at all the pods created
+    matchLabels: #find all the pods with the following labels
+      app: query #label name
+  template: # specifies the configuration of pods to be created
+    metadata:
+      labels: # give the pod the following label
+        app: query
+    spec:
+      containers: # run the following containers inside the pod
+        - name: query
+          image: brandednomad/blog-service-query
+---
+# ipcluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: query
+  type: ClusterIP
+  ports:
+    - name: query
+      protocol: TCP
+      port: 3003
+      targetPort: 3003

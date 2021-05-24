@@ -61,7 +61,7 @@ server.listen(3003,async ()=>{
     console.log("Up and running on 3003");
     //checks the event bus for any missed events
     try{
-        const res = await axios.get('http://localhost:3005/events')
+        const res = await axios.get('http://eb-srv:3005/events')
         for(let event of res.data){
             console.log('processing event:', event.type);
             handleEvent(event.type,event.data)

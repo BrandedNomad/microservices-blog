@@ -1,0 +1,32 @@
+apiVersion: apps/v1 #deployment object is inside apps
+kind: Deployment #kind of configuration
+metadata:
+  name: comments-depl #name of deployment
+spec:
+  replicas: 1
+  selector: # take a look at all the pods created
+    matchLabels: #find all the pods with the following labels
+      app: comments #label name
+  template: # specifies the configuration of pods to be created
+    metadata:
+      labels: # give the pod the following label
+        app: comments
+    spec:
+      containers: # run the following containers inside the pod
+        - name: comments
+          image: brandednomad/blog-service-comments
+---
+# ipcluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  selector:
+    app: comments
+  type: ClusterIP
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 3002
+      targetPort: 3002

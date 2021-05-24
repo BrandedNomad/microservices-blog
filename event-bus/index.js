@@ -14,12 +14,12 @@ server.post('/events',(req,res)=>{
 
     //Post service (posts-cluster-srv is the name of the pod clusterIP service)
     axios.post('http://posts-cluster-srv:3001/events',event).catch(e=>console.log(e))
-    // //Comments Service
-    // axios.post('http://localhost:3002/events',event).catch(e=>console.log(e))
-    // //Query Service
-    // axios.post('http://localhost:3003/events',event).catch(e=>console.log(e))
-    // //Moderation Service
-    // axios.post('http://localhost:3004/events',event).catch(e=>console.log(e))
+    //Comments Service
+    axios.post('http://comments-srv:3002/events',event).catch(e=>console.log(e))
+    //Query Service
+    axios.post('http://query-srv:3003/events',event).catch(e=>console.log(e))
+    //Moderation Service
+    axios.post('http://moderation-srv:3004/events',event).catch(e=>console.log(e))
 
     res.send({status:'OK'})
 

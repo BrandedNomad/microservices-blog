@@ -17,7 +17,7 @@ server.get('/posts/:id/comments',(req,res)=>{
 
 });
 
-
+//create comment
 server.post('/posts/:id/comments',async (req,res)=>{
     const commentId = randomBytes(4).toString('hex')
     const {content} = req.body
@@ -29,7 +29,7 @@ server.post('/posts/:id/comments',async (req,res)=>{
 
 
     //emits event
-    await axios.post('http://localhost:3005/events',{
+    await axios.post('http://eb-srv:3005/events',{
         type:'CommentCreated',
         data: {
             id:commentId,
@@ -42,7 +42,7 @@ server.post('/posts/:id/comments',async (req,res)=>{
     res.status(201).send(comments)
 })
 
-//Events
+//Recieve Events
 server.post("/events",async (req,res)=>{
     console.log("received event", req.body.type)
 
@@ -56,7 +56,7 @@ server.post("/events",async (req,res)=>{
         })
         comment.status = status;
 
-        await axios.post('http://localhost:3005/events',{
+        await axios.post('http://eb-srv:3005/events',{
             type:'CommentUpdated',
             data:{
                 id,
