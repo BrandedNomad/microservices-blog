@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true' #allows for the use of regular expressions
+spec:
+  rules: #Routing Rules
+    - host: myblogapp.com #internal domain inside of kubernetes cluster (redirects to localhost configured inside of C:\Windows\System32\Drivers\etc\hosts)
+      http:
+        paths: #NOTE: ingress cannot route based on POST/GET/PATCH etc, need unique routes
+          - path: /posts/create #Whenever a request is made to this path
+            pathType: Prefix
+            backend:
+              service:
+                name: posts-cluster-srv #route request to the clusterIP of the this service
+                port:
+                  number: 3001 #on the following port
+          - path: /posts #Whenever a request is made to this path
+            pathType: Prefix
+            backend:
+              service:
+                name: query-srv #route request to the clusterIP of the this service
+                port:
+                  number: 3003 # on the following port
+          - path: /posts/?(.*)/comments #Whenever a request is made to this path. ?(.*) is a regular expression for :id
+            pathType: Prefix
+            backend:
+              service:
+                name: comments-srv #route request to the clusterIP of the this service
+                port:
+                  number: 3002 # on the following port
+          - path: /?(.*) #Whenever a path does not match any of the above paths. Needs to be the last path specified
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv #route request to the clusterIP of the this service
+                port:
+                  number: 3000 # on the following port

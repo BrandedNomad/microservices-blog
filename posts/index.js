@@ -12,13 +12,14 @@ server.use(cors());
 
 const posts = {};
 
+//not used - handled by the query service
 server.get('/posts',(req,res)=>{
     res.status(200).send(posts)
 
 });
 
-
-server.post('/posts',async (req,res)=>{
+//create a post
+server.post('/posts/create',async (req,res)=>{
     const id = randomBytes(4).toString('hex')
     const {title} = req.body;
     posts[id] = {

@@ -1,32 +1,32 @@
 apiVersion: apps/v1 #deployment object is inside apps
 kind: Deployment #kind of configuration
 metadata:
-  name: eb-depl #name of deployment
+  name: client-depl #name of deployment
 spec:
-  replicas: 1 # the amount of pods to create
+  replicas: 1
   selector: # take a look at all the pods created
     matchLabels: #find all the pods with the following labels
-      app: eb #label name
+      app: client #label name
   template: # specifies the configuration of pods to be created
     metadata:
       labels: # give the pod the following label
-        app: eb
+        app: client
     spec:
       containers: # run the following containers inside the pod
-        - name: eb
-          image: brandednomad/blog-service-eventbus
+        - name: client
+          image: brandednomad/blog-client
 ---
-# ipCluster
+# ipcluster
 apiVersion: v1
 kind: Service
 metadata:
-  name: eb-srv
+  name: client-srv
 spec:
   selector:
-    app: eb
+    app: client
   type: ClusterIP
   ports:
-    - name: eb
+    - name: client
       protocol: TCP
-      port: 3005 #cluster port
-      targetPort: 3005 #application port
+      port: 3000 #port for create-react-app client
+      targetPort: 3000
