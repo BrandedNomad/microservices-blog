@@ -25,7 +25,7 @@ Build with:
 * Posts: Create a Post
 * Comments: Add a comment to a post
 * Content Moderation: Comments are moderated. If a comment contains the word Orange, it will be rejected.
-* Event syncing: If the query service goes down, it will look for any missed events when it starts back up again.
+* Event syncing: If the moderation service goes down, it will look for any missed events when it starts back up again, and moderate the unmoderated comments.
 
 ## Requirements
 
